@@ -1,0 +1,79 @@
+@media (min-width: 992px) and (max-width: 1199px){
+
+/*============ Header Start ============*/
+
+/*============ Header End ============*/
+
+/*============ Content Start ============*/
+
+/*============ Content End ============*/
+
+/*============ Footer Start ============*/
+
+/*============ Footer End ============*/
+
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+
+/*============ Header Start ============*/
+
+/*============ Header End ============*/
+
+/*============ Content Start ============*/
+
+/*============ Content End ============*/
+
+/*============ Footer Start ============*/
+
+/*============ Footer End ============*/
+
+}
+
+@media (max-width: 767px){
+
+/*============ Header Start ============*/
+
+/*============ Header End ============*/
+
+/*============ Content Start ============*/
+
+/*============ Content End ============*/
+
+/*============ Footer Start ============*/
+
+/*============ Footer End ============*/
+
+}
+
+@media (min-width: 568px) and (max-width: 767px){
+
+/*============ Header Start ============*/
+
+/*============ Header End ============*/
+
+/*============ Content Start ============*/
+
+/*============ Content End ============*/
+
+/*============ Footer Start ============*/
+
+/*============ Footer End ============*/
+
+}
+
+@media (min-width: 240px) and (max-width: 567px){
+
+/*============ Header Start ============*/
+
+/*============ Header End ============*/
+
+/*============ Content Start ============*/
+.main-modal .capa-info-2 .capa-info-2-top .text { min-height:160px;}
+/*============ Content End ============*/
+
+/*============ Footer Start ============*/
+
+/*============ Footer End ============*/
+
+}

@@ -1,0 +1,126 @@
+<!-- Content Start -->   
+<section class="content">
+
+    <!--clinician page start-->
+    <div class="clinician-content">
+        
+        <!--clinician-section start-->
+    	<div class="clinician-section">
+        	<div class="container">
+            	<div class="clinician-block">
+                	<div class="row">
+                    	<div class="col-sm-12">
+                        	<div class="clinician-header">
+                            	<div class="left-icon">
+                                	<a href="javascript:void(0)" class="fetch-observation-qes" title="Observation Question"><img src="<?php echo base_url("public/images/clipboard-icon.svg"); ?>" alt=""></a>
+                                    <span>Waiting Room Observation</span>
+                                </div>
+                                <div class="right-icon">
+                                	<a href="<?php echo base_url('home/logout'); ?>" title="Logout"><img src="<?php echo base_url("public/images/logout-icon.svg"); ?>" alt=""></a>
+                                    <span>Logout</span>
+                                </div>
+                                <div class="admin-name"><?php echo $nvUsername;?></div>
+                                <div class="welcome-box"><a href="#">Welcome to Capa-Rad.com</a></div>
+                            </div>
+                            <div class="clinician-select">
+                            	<?php //echo "<br>-=-=-".$nvUsername;?>
+                                <div class="select-row">
+                                	<select class="selectpicker">
+                                    	<option value="">Clinician</option>
+                                        <?php
+										if(isset($nvUsernam) && $nvUsernam != "")
+										{
+											?>
+                                            <option selected="selected"><?php echo $nvUsername;?></option>
+                                            <?php
+										}
+										?>
+                                        
+                                    </select>
+                                </div>
+                                
+                                <div class="select-row">
+                                	<select class="selectpicker nvchangegroup">
+                                    	<option value="">Group</option>
+                                        <?php
+										if(!empty($nvGroupArray))
+										{
+											$nvgroupsessionID = $this->session->userdata('groupidsession');
+											foreach($nvGroupArray as $group)
+											{
+												if($nvgroupsessionID == $group->group_id)
+												{
+													echo '<option value="'.$group->group_id.'"  selected="selected">'.$group->group_name.'</option>';
+												}
+												else
+												{
+													echo '<option value="'.$group->group_id.'">'.$group->group_name.'</option>';
+												}
+												
+											}
+										}
+										?>
+                                        
+                                    </select>
+                                </div>
+                                <div class="select-row nvajaxchild">
+                                	<select class="selectpicker nvselparentteacher">
+                                    	<option value="" >Child</option>
+                                       
+                                    </select>
+                                </div>
+                            </div>
+                        	
+                            <div id="clinician-data">
+                               <canvas id="jqChart" style="width:500px; height:300px;border:0px solid #000;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--clinician-section end-->
+    	 
+    </div>
+    <!--clinician page end-->
+     
+</section>
+<!-- Content End -->
+<script src="<?php echo base_url(); ?>public/js/Chart.bundle.js"></script>
+<?php
+if($this->session->userdata('groupidsession') > 0)
+{
+	?>
+    <script language="javascript">
+		$(document).ready(function () {
+			//$(".nvchangegroup").trigger("change");
+			var selectval = "<?php echo $this->session->userdata('groupidsession');?>";
+			var childrenID = "<?php echo $this->session->userdata('childsession');?>";
+			$.ajax({
+					url:base_url + "clinical/fetchchildren",
+					type:"POST",
+					data: {nvgroupID:selectval},
+					success:function(response)
+					{
+						$(".nvajaxchild").html(response);
+						$('.selectpicker').selectpicker('refresh');
+						$anim.hide();
+						$.ajax({
+							url:base_url + "clinical/fetchchildrendetail",
+							type:"POST",
+							data: {childrenID:childrenID},
+							success:function(response)
+							{
+								//alert("AAAAAAA");
+								//alert(response);
+								$("#clinician-data").html(response);
+								$anim.hide();
+							}
+						});
+					}
+				});
+		});
+	</script>
+    <?php
+}
+?>
