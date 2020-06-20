@@ -18,17 +18,17 @@ class Home extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
-	 
+
 	function __construct()
     {
 
         // Call the Model constructor
-		// $this->output->enable_profiler(TRUE);  
+		// $this->output->enable_profiler(TRUE);
 		parent::__construct();
-		
+
     }
-	
-	
+
+
 	public function index()
 	{
 		$this->load->library('session');
@@ -56,7 +56,7 @@ class Home extends CI_Controller {
 			{
 				$redirectTo = base_url('clinical/');
 			}
-			
+
 			header('Location: '.$redirectTo);
 		}
 		else
@@ -66,7 +66,7 @@ class Home extends CI_Controller {
 		$this->load->view('modal',$center);
 		$this->load->view('footer');
 	}
-	
+
 	function forgot()
     {
 		$this->load->library('session');
@@ -79,9 +79,9 @@ class Home extends CI_Controller {
 		$this->load->view('modal');
 		$this->load->view('footer');
     }
-	//For Registration 
+	//For Registration
 	public function registration()
-	{	
+	{
 		$this->load->model('Database');
 		$this->load->library('email');
 		//create insert array
@@ -94,12 +94,12 @@ class Home extends CI_Controller {
 		   'total_amount'=>$_POST['total_amount'],
 		   'role'=>'admin'
  		);
-		
-		
+
+
 		if($_POST['name']=="")
 		{
 			$return['result'] = 'error';
-			$return['msg']="Name is Required";	
+			$return['msg']="Name is Required";
 		}
 		elseif($_POST['email']=="")
 		{
@@ -139,7 +139,7 @@ class Home extends CI_Controller {
 		else
 		{
 			$userid=$this->Database->AddFunction('users',$data); //create user
-			
+
 			$query_string="INSERT IGNORE INTO `p_master` (p_email,p_text) values ('".$_POST['email']."','".$this->Enc->encrypt($_POST['password'])."')";
 			$this->db->query($query_string);
 
@@ -150,7 +150,7 @@ class Home extends CI_Controller {
 			'number_of_child'=>$_POST['number_of_child'],
 			'is_active'=>'1');
 			$this->Database->addFunction('group',$groupData);  //create group
-			
+
 				//for send email
 			/*$this->email->from('hello@capared.com', 'capa-red');
 			$this->email->to($_POST['email']);
@@ -172,25 +172,25 @@ class Home extends CI_Controller {
 									->message('Thank you for Registration.\n User Name/Email:"'.$_POST['email'].'" \n Password :"'.$_POST['password'].'"')
 									->send();
 
-			
+
 			$return['result'] = 'success';
 			$return['msg']="You are Register Successfully!";
 			$return['insid']=$userid;
-			
+
 		}
 		echo json_encode($return);
 	}
-	//For Login 
+	//For Login
 	public function loginform()
 	{
 		$email=$_POST['email'];
 		$password=$_POST['password'];
-		
+
 		$this->load->model('Database');
-		$this->load->library('session');		
-		
-		$check=$this->Database->checklogin($email,$password);  
-		
+		$this->load->library('session');
+
+		$check=$this->Database->checklogin($email,$password);
+
 		if($email!='' && $password!='')
 		{
 			if(count($check)>0)
@@ -201,7 +201,7 @@ class Home extends CI_Controller {
 				$_SESSION['email'] = $check[0]->email;
 				$_SESSION['role'] = $check[0]->role;
 				$return['result'] = 'success';
-				$return['msg']="Login Succesfully!";	
+				$return['msg']="Login Succesfully!";
 				$rediectTo=base_url("/admin");
 				if(strtolower($_SESSION['role'])=='parent')
 				{
@@ -215,22 +215,22 @@ class Home extends CI_Controller {
 				{
 					$redirectTo = base_url('clinical/');
 				}
-				
+
 				$return['redirect']=$rediectTo;
 			}
 			else
 			{
 				$return['result'] = 'error';
-				$return['msg']="Wrong email or password";	
+				$return['msg']="Wrong email or password";
 			}
 		}else{
-			
+
 			$return['result'] = 'error';
 			$return['msg']="Wrong email or password";
 		}
 		echo json_encode($return);
 	}
-	
+
 	public function forgotPassword()
 	{
 		$this->load->model('Database');
@@ -238,23 +238,23 @@ class Home extends CI_Controller {
 		$config = Array(
 			  'mailtype' => 'html',
 			  'charset' => 'iso-8859-1'
-			);		
+			);
 		$this->load->library('email',$config);
-		
+
 		$check=$this->Database->forgotEmail('users',$_POST['email']);
 		if(count($check)<=0 || $check=="")
 		{
 			$return['result'] = 'error';
-			$return['msg']="Wrong password";	
+			$return['msg']="Wrong password";
 		}
 		else
-		{	
+		{
 			$return['result'] = 'success';
 			$return['msg']="Check Mail";
 			$this->Database->updateForgotString('users',$check[0]->user_id);
-			
+
 			$check=$this->Database->forgotEmail('users',$_POST['email']);
-			
+
 				$email=$_POST['email'];
 				$headers = "MIME-Version: 1.0" . "\r\n";
 				$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -286,9 +286,9 @@ class Home extends CI_Controller {
 	public function resetpassword()
 	{
 		$this->load->model('Database');
-		$this->load->library('session');	
+		$this->load->library('session');
 		$this->load->library('email');
-		
+
 		$email=$_POST['email'];
 		$usercode=$_POST['usercode'];
 		$password=$_POST['pass'];
@@ -302,16 +302,16 @@ class Home extends CI_Controller {
 		{
 			$return['result'] = 'error';
 			$return['msg']="Confrim password and password dose not match!";
-			
+
 		}else{
-			
+
 				$this->Database->updatePassword('users',$email,$usercode,$password);
 				$return['result'] = 'success';
 				$return['msg']="Update Successfully!";
 		}
 		echo json_encode($return);
 	}
-	
+
 	public function getCenter()
 	{
 		$this->load->model('Database');
@@ -359,7 +359,7 @@ class Home extends CI_Controller {
 		unset($_SESSION['username']);
 		unset($_SESSION['email']);
 		unset($_SESSION['role']);
-		
+
 		unset($_SESSION['nvuserid']);
 		unset($_SESSION['nvusername']);
 		unset($_SESSION['nvemail']);
