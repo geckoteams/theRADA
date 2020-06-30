@@ -1,8 +1,19 @@
+<IfModule mod_php5.c>
+php_value max_execution_time 300
+php_value max_input_vars 1500
+</IfModule>
+<IfModule mod_rewrite.c>
+DirectoryIndex index.php
 RewriteEngine on
-RewriteBase /
-RewriteCond %{HTTP_HOST} .
-RewriteCond %{HTTP_HOST} !^www\.therada\.co\.uk [NC]
-RewriteRule (.*) http://www.therada.co.uk/$1 [R=301,L]
+RewriteBase /theRADA/
+RewriteCond $1 !^(index\.php|images|css|js|robots\.txt|favicon\.ico)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?/$1 [L]
+RewriteRule ^(.*)$ ./index.php/$1 [L,QSA] 
+</IfModule>
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    # Submitted by: ElliotHaughin
+    ErrorDocument 404 /index.php
+</IfModule>
